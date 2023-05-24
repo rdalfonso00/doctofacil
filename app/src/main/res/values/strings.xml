@@ -12,4 +12,22 @@
     <string name="registro">Registro</string>
     <string name="bienvenido_a_doctof_cil">Bienvenido a DoctoFácil</string>
     <string name="inicia_sesi_n">Inicia Sesión</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="doctofacil">DoctoFácil</string>
+    <string name="ingrese_sus_datos">Ingrese sus datos:</string>
+    <string name="m_dico_o_paciente">¿Médico o paciente?</string>
+    <string name="paciente">Paciente</string>
+    <string name="m_dico">Médico</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="telefono">Teléfono</string>
+    <string name="fecha_de_nacimiento">Fecha de nacimiento</string>
+    <string name="correo_electronico">Correo electrónico</string>
+    <string name="contrasenia">Contraseña</string>
+    <string name="registrate">Regístrate</string>
+    <string name="cedula">Numero de cédula</string>
+    <string name="direccion">Dirección</string>
+    <string name="especialidad_medica">Especialidad médica</string>
+    <string name="iniciar_sesi_n">Iniciar Sesión</string>
 </resources>

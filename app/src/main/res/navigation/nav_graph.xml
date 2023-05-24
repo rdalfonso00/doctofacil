@@ -3,26 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
-
+    app:startDestination="@id/firstFragment">
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/firstFragment"
         android:name="com.example.doctofacil.FirstFragment"
-        android:label="@string/first_fragment_label"
+        android:label="DoctoFácil"
         tools:layout="@layout/fragment_first" >
-
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_firstFragment_to_signUpTypeFragment"
+            app:destination="@id/signUpTypeFragment" />
+        <action
+            android:id="@+id/action_firstFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.doctofacil.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second" >
-
+        android:id="@+id/signUpTypeFragment"
+        android:name="com.example.doctofacil.SignUpTypeFragment"
+        android:label="Registro"
+        tools:layout="@layout/fragment_sign_up_type" >
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_signUpTypeFragment_to_firstFragment"
+            app:destination="@id/firstFragment" />
+        <action
+            android:id="@+id/action_signUpTypeFragment_to_doctorSignupFragment"
+            app:destination="@id/doctorSignupFragment" />
+        <action
+            android:id="@+id/action_signUpTypeFragment_to_patientSignupFragment"
+            app:destination="@id/patientSignupFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/patientSignupFragment"
+        android:name="com.example.doctofacil.PatientSignupFragment"
+        android:label="Registro"
+        tools:layout="@layout/fragment_patient_signup" />
+    <fragment
+        android:id="@+id/doctorSignupFragment"
+        android:name="com.example.doctofacil.DoctorSignupFragment"
+        android:label="Registro"
+        tools:layout="@layout/fragment_doctor_signup" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.doctofacil.LoginFragment"
+        android:label="Inicio de sesión"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_mainDoctorFragment"
+            app:destination="@id/mainDoctorFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainPatientFragment"
+            app:destination="@id/mainPatientFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainDoctorFragment"
+        android:name="com.example.doctofacil.MainDoctorFragment"
+        android:label="DoctoFácil"
+        tools:layout="@layout/fragment_main_doctor" />
+    <fragment
+        android:id="@+id/mainPatientFragment"
+        android:name="com.example.doctofacil.MainPatientFragment"
+        android:label="DoctoFácil"
+        tools:layout="@layout/fragment_main_patient" />
 </navigation>
