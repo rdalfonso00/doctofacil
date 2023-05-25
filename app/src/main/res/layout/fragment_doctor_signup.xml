@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DoctorSignupFragment">
+    tools:context=".ui.loginsignup.DoctorSignupFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/editTextCedula" />
 
             <EditText
-                android:id="@+id/editTextCedula2"
+                android:id="@+id/editTextAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -97,7 +97,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textViewIngreseData" />
 
             <EditText
-                android:id="@+id/editTextName"
+                android:id="@+id/editTextNameDoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -111,7 +111,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <EditText
-                android:id="@+id/editTextLastName"
+                android:id="@+id/editTextLastNameDoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -134,7 +134,7 @@
                 android:text="@string/apellidos"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextNameDoc" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -145,10 +145,10 @@
                 android:text="@string/telefono"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextLastNameDoc" />
 
             <EditText
-                android:id="@+id/editTextPhone"
+                android:id="@+id/editTextPhoneDoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -171,7 +171,7 @@
                 android:text="@string/cedula"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextPhoneDoc" />
 
             <EditText
                 android:id="@+id/editTextCedula"
@@ -200,7 +200,7 @@
                 android:text="@string/fecha_de_nacimiento"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextCedula2" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextAddress" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -211,7 +211,7 @@
                 android:text="@string/correo_electronico"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextBirthDate" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextBirthDateDoc" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -222,10 +222,10 @@
                 android:text="@string/contrasenia"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextEmailDoc" />
 
             <EditText
-                android:id="@+id/editTextBirthDate"
+                android:id="@+id/editTextBirthDateDoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -242,7 +242,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <EditText
-                android:id="@+id/editTextTextEmailAddress"
+                android:id="@+id/editTextEmailDoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -256,7 +256,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
             <EditText
-                android:id="@+id/editTextTextPassword"
+                android:id="@+id/editTextPasswordDoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -272,7 +272,10 @@
             <Button
                 android:id="@+id/buttonRegisterDoctor"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="0.8"
+                app:layout_constraintHeight_percent="0.1"
+
                 android:layout_marginTop="16dp"
                 android:text="@string/registrate"
                 android:textSize="@dimen/large_button_text"
@@ -282,8 +285,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
-                app:layout_constraintWidth_percent="0.5" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextPasswordDoc" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

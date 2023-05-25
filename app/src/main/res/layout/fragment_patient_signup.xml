@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".PatientSignupFragment">
+    tools:context=".ui.loginsignup.PatientSignupFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewIngreseData" />
 
         <EditText
-            android:id="@+id/editTextName"
+            android:id="@+id/editTextNamePat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -53,7 +53,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <EditText
-            android:id="@+id/editTextLastName"
+            android:id="@+id/editTextLastNamePat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -76,7 +76,7 @@
             android:text="@string/apellidos"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextNamePat" />
 
         <TextView
             android:id="@+id/textView4"
@@ -87,10 +87,10 @@
             android:text="@string/telefono"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextLastNamePat" />
 
         <EditText
-            android:id="@+id/editTextPhone"
+            android:id="@+id/editTextPhonePat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -114,7 +114,7 @@
             android:text="@string/fecha_de_nacimiento"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextPhonePat" />
 
         <TextView
             android:id="@+id/textView6"
@@ -125,7 +125,7 @@
             android:text="@string/correo_electronico"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextBirthDate" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextBirthDatePat" />
 
         <TextView
             android:id="@+id/textView7"
@@ -136,10 +136,10 @@
             android:text="@string/contrasenia"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextEmailAddressPat" />
 
         <EditText
-            android:id="@+id/editTextBirthDate"
+            android:id="@+id/editTextBirthDatePat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -156,7 +156,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <EditText
-            android:id="@+id/editTextTextEmailAddress"
+            android:id="@+id/editTextEmailAddressPat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -170,7 +170,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/editTextPasswordPat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -184,9 +184,11 @@
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <Button
-            android:id="@+id/buttonRegisterDoctor"
+            android:id="@+id/buttonRegisterPat"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintHeight_percent="0.1"
             android:layout_marginTop="16dp"
             android:text="@string/registrate"
             android:textSize="@dimen/large_button_text"
@@ -196,8 +198,7 @@
             app:layout_constraintEnd_toEndOf="parent"
 
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
-            app:layout_constraintWidth_percent="0.5" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextPasswordPat" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpTypeFragment"
-        android:name="com.example.doctofacil.SignUpTypeFragment"
+        android:name="com.example.doctofacil.ui.loginsignup.SignUpTypeFragment"
         android:label="Registro"
         tools:layout="@layout/fragment_sign_up_type" >
         <action
@@ -33,17 +33,17 @@
     </fragment>
     <fragment
         android:id="@+id/patientSignupFragment"
-        android:name="com.example.doctofacil.PatientSignupFragment"
+        android:name="com.example.doctofacil.ui.loginsignup.PatientSignupFragment"
         android:label="Registro"
         tools:layout="@layout/fragment_patient_signup" />
     <fragment
         android:id="@+id/doctorSignupFragment"
-        android:name="com.example.doctofacil.DoctorSignupFragment"
+        android:name="com.example.doctofacil.ui.loginsignup.DoctorSignupFragment"
         android:label="Registro"
         tools:layout="@layout/fragment_doctor_signup" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.doctofacil.LoginFragment"
+        android:name="com.example.doctofacil.ui.loginsignup.LoginFragment"
         android:label="Inicio de sesión"
         tools:layout="@layout/fragment_login" >
         <action
@@ -55,12 +55,20 @@
     </fragment>
     <fragment
         android:id="@+id/mainDoctorFragment"
-        android:name="com.example.doctofacil.MainDoctorFragment"
+        android:name="com.example.doctofacil.ui.doctor.MainDoctorFragment"
         android:label="DoctoFácil"
-        tools:layout="@layout/fragment_main_doctor" />
+        tools:layout="@layout/fragment_main_doctor" >
+        <action
+            android:id="@+id/action_mainDoctorFragment_to_firstFragment"
+            app:destination="@id/firstFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mainPatientFragment"
-        android:name="com.example.doctofacil.MainPatientFragment"
+        android:name="com.example.doctofacil.ui.patient.MainPatientFragment"
         android:label="DoctoFácil"
-        tools:layout="@layout/fragment_main_patient" />
+        tools:layout="@layout/fragment_main_patient" >
+        <action
+            android:id="@+id/action_mainPatientFragment_to_firstFragment"
+            app:destination="@id/firstFragment" />
+    </fragment>
 </navigation>

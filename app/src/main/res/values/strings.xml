@@ -30,4 +30,7 @@
     <string name="direccion">Dirección</string>
     <string name="especialidad_medica">Especialidad médica</string>
     <string name="iniciar_sesi_n">Iniciar Sesión</string>
+    <string name="navigation_drawer_open">Abrir Menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
+    <string name="title_activity_main_doctor">MainDoctorActivity</string>
 </resources>

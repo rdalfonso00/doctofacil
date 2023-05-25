@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpTypeFragment">
+    tools:context=".ui.loginsignup.SignUpTypeFragment">
 
     <TextView
         android:id="@+id/textViewMedicoPaciente"
@@ -37,13 +37,13 @@
     <Button
         android:id="@+id/buttonSignDoctor"
         android:layout_width="0dp"
-
         android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintHeight_percent="0.1"
         android:layout_marginTop="28dp"
         android:text="@string/m_dico"
 
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintHeight_percent="0.1"
+
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintStart_toStartOf="parent"

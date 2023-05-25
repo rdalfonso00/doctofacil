@@ -37,8 +37,9 @@
     <Button
         android:id="@+id/buttonRegistro"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.5"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintHeight_percent="0.1"
         android:layout_marginTop="28dp"
         android:text="@string/registro"
 
@@ -50,12 +51,13 @@
         android:id="@+id/buttonLogin"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintHeight_percent="0.1"
         android:layout_marginTop="28dp"
         android:text="@string/inicia_sesi_n"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegistro"
-        app:layout_constraintWidth_percent="0.5" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegistro" />
 </androidx.constraintlayout.widget.ConstraintLayout>
