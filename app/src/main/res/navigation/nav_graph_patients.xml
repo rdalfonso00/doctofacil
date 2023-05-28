@@ -13,12 +13,21 @@
         android:id="@+id/patientSeeDoctorsFragment"
         android:name="com.example.doctofacil.ui.patient.fragments.PatientSeeDoctorsFragment"
         android:label="Ver médicos"
-        tools:layout="@layout/fragment_patient_see_doctors" />
+        tools:layout="@layout/fragment_patient_see_doctors" >
+        <action
+            android:id="@+id/action_patientSeeDoctorsFragment_to_addApointmentFragment"
+            app:destination="@id/addApointmentFragment" />
+    </fragment>
     <fragment
         android:id="@+id/patientAppointmentsFragment"
         android:name="com.example.doctofacil.ui.patient.fragments.PatientAppointmentsFragment"
         android:label="Citas"
         tools:layout="@layout/fragment_patient_appointments" />
+    <fragment
+        android:id="@+id/addApointmentFragment"
+        android:name="com.example.doctofacil.ui.patient.fragments.AddApointmentFragment"
+        android:label="Agendar cita"
+        tools:layout="@layout/fragment_add_apointment" />
 
 
 </navigation>

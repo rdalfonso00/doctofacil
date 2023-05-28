@@ -3,6 +3,8 @@ package com.example.doctofacil.ui.patient.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,11 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.doctofacil.FirstFragment;
 import com.example.doctofacil.R;
 import com.example.doctofacil.model.Doctor;
 import com.example.doctofacil.model.Patient;
 import com.example.doctofacil.model.database.DBConnection;
+import com.example.doctofacil.model.database.DBHelper;
 import com.example.doctofacil.ui.patient.fragments.adapters.SeeDoctorsAdapter;
 
 import java.util.List;
@@ -24,10 +29,11 @@ import java.util.List;
  * Use the {@link PatientSeeDoctorsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PatientSeeDoctorsFragment extends Fragment {
+public class PatientSeeDoctorsFragment extends Fragment implements SeeDoctorsAdapter.OnItemClickListener, SeeDoctorsAdapter.OnAgendarCitaClickListener{
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PATIENT = "patient";
+    private static final String ARG_DOCTOR_FOR_PATIENT = "doc_for_patient";
 
     private Patient patient;
 
@@ -70,11 +76,29 @@ public class PatientSeeDoctorsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_patient_see_doctors, container, false);
+        dbConnection = new DBConnection(getContext());
 
         recyclerView = view.findViewById(R.id.recycler_view_see_doctors);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //doctorList = dbConnection.getAllDoctors();
+        doctorList = dbConnection.getAllDoctors();
+        adapter = new SeeDoctorsAdapter(doctorList, this::onItemClick, this::onAgendarCita, getContext());
+        recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(Doctor doctor) {
+        adapter.showBottomSheetDialog();
+    }
+
+    @Override
+    public void onAgendarCita(Doctor doctor) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_PATIENT, patient);
+        bundle.putSerializable(ARG_DOCTOR_FOR_PATIENT, doctor);
+        NavHostFragment.findNavController(PatientSeeDoctorsFragment.this)
+                .navigate(R.id.action_patientSeeDoctorsFragment_to_addApointmentFragment, bundle);
+        adapter.dismissBottomSheetDialog();
     }
 }

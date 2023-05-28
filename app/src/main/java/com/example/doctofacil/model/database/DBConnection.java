@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.doctofacil.model.Appointment;
+import com.example.doctofacil.model.Doctor;
 import com.example.doctofacil.model.Patient;
 import com.example.doctofacil.model.Recipe;
 import com.example.doctofacil.model.User;
@@ -143,6 +144,43 @@ public class DBConnection {
         return user;
     }
 
+    public User getUserRoleById(int userId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                COLUMN_USER_ID,
+                COLUMN_USER_ROLE,
+        };
+
+        String selection = COLUMN_USER_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(userId)};
+
+        Cursor cursor = db.query(
+                TABLE_USERS,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        User user = null;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            //int userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID));
+            String role = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ROLE));
+
+            user = new User(userId, null, null, null, null, null,null, role);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return user;
+    }
+
     public Patient getPatientById(int patientId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -194,8 +232,8 @@ public class DBConnection {
     }
 
 
-    public List<User> getAllDoctors() {
-        List<User> doctors = new ArrayList<>();
+    public List<Doctor> getAllDoctors() {
+        List<Doctor> doctors = new ArrayList<>();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -239,19 +277,18 @@ public class DBConnection {
                 String address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ADDRESS));
                 String speciality = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_SPECIALTY));
                 String licence = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LICENSE_ID));
-                //TODO: fix and uncomment next line
-                /*
-                //Doctor doctor = new Doctor(userId, firstName, lastName, email, password, birthdate, cellphone, role, address, speciality, licence);
-                //doctors.add(doctor);
 
-                 */
+                Doctor doctor = new Doctor(userId, firstName, lastName, birthdate, cellphone, email,
+                        "password", licence, speciality, address);
+                doctors.add(doctor);
+
             } while (cursor.moveToNext());
         }
 
         if (cursor != null) {
             cursor.close();
         }
-
+        Log.i("poncho", "there are X doctors " + doctors.size());
         return doctors;
     }
 

@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonRegistro"
+        android:id="@+id/buttonAgendarCitaBottom"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintWidth_percent="0.8"
@@ -58,5 +58,5 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegistro" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonAgendarCitaBottom" />
 </androidx.constraintlayout.widget.ConstraintLayout>

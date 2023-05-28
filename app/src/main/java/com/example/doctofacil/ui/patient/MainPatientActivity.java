@@ -12,7 +12,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,7 +35,8 @@ import com.google.android.material.navigation.NavigationView;
 public class MainPatientActivity extends AppCompatActivity {
 
     private static final String ARG_PATIENT = "patient";
-
+    private static final String ARG_USER_ID = "user_id";
+    private static final String ARG_TOKEN = "auth_token";
     ///////
 
     private MaterialToolbar toolbar;
@@ -105,13 +108,24 @@ public class MainPatientActivity extends AppCompatActivity {
                     case R.id.nav_pat_settings:
                         Toast.makeText(getBaseContext(), "settings",Toast.LENGTH_SHORT).show(); break;
                     case R.id.nav_pat_logout:
-                        Toast.makeText(getBaseContext(), "Logout was pressed :0 o:", Toast.LENGTH_SHORT).show(); break;
+                        logout();
+                        break;
                     default:
                         return true;
                 }
                 return true;
             }
         });
+    }
+
+    private void logout() {
+        SharedPreferences sharedPreferences = getBaseContext()
+                .getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(ARG_TOKEN);
+        editor.remove(ARG_USER_ID);
+        editor.apply();
+        finish(); // end activity
     }
 
     @Override

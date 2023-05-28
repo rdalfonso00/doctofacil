@@ -1,13 +1,14 @@
 package com.example.doctofacil.ui.loginsignup;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.example.doctofacil.model.database.DBConnection;
 import com.example.doctofacil.ui.customviews.ErrorDialogFragment;
 import com.example.doctofacil.ui.doctor.MainDoctorActivity;
 import com.example.doctofacil.ui.patient.MainPatientActivity;
+import com.example.doctofacil.utils.TokenGenerator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,10 +33,9 @@ import com.example.doctofacil.ui.patient.MainPatientActivity;
  */
 public class LoginFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_USER_ID = "user_id";
+    private static final String ARG_TOKEN = "auth_token";
 
     private EditText etEmail;
     private EditText etPassword;
@@ -109,6 +110,9 @@ public class LoginFragment extends Fragment {
                         } else {
                             intent = new Intent(getActivity(), MainPatientActivity.class);
                         }
+
+                        saveUserSession(user.getUser_id());
+
                         intent.putExtra("user_id", user.getUser_id());
                         startActivity(intent);
                         // Proceed with desired action, such as navigating to another screen
@@ -120,6 +124,17 @@ public class LoginFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    // save user session with auth token in sharedprefs, then retrieve it in MainActivity
+    private void saveUserSession(int userId) {
+        String authToken = TokenGenerator.generateAuthToken(userId);
+        // Store the authToken and userId in shared preferences
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(ARG_USER_ID, userId);
+        editor.putString(ARG_TOKEN, authToken);
+        editor.apply();
     }
 
     private boolean validateFields(String email, String password) {

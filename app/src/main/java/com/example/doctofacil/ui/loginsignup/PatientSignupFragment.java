@@ -75,7 +75,7 @@ public class PatientSignupFragment extends Fragment {
         dbConnection = new DBConnection(getContext());
 
         etFirstName = view.findViewById(R.id.editTextNamePat);
-        etLastName = view.findViewById(R.id.editTextLastNamePat);
+        etLastName = view.findViewById(R.id.editTextDateAppoint);
         etPhone = view.findViewById(R.id.editTextPhonePat);
         etEmail = view.findViewById(R.id.editTextEmailAddressPat);
         etPassword = view.findViewById(R.id.editTextPasswordPat);
