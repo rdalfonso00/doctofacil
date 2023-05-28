@@ -29,7 +29,7 @@ import java.util.List;
  * Use the {@link PatientSeeDoctorsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PatientSeeDoctorsFragment extends Fragment implements SeeDoctorsAdapter.OnItemClickListener, SeeDoctorsAdapter.OnAgendarCitaClickListener{
+public class PatientSeeDoctorsFragment extends Fragment implements SeeDoctorsAdapter.OnAgendarCitaClickListener{
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PATIENT = "patient";
@@ -81,15 +81,10 @@ public class PatientSeeDoctorsFragment extends Fragment implements SeeDoctorsAda
         recyclerView = view.findViewById(R.id.recycler_view_see_doctors);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         doctorList = dbConnection.getAllDoctors();
-        adapter = new SeeDoctorsAdapter(doctorList, this::onItemClick, this::onAgendarCita, getContext());
+        adapter = new SeeDoctorsAdapter(doctorList, this::onAgendarCita, getContext());
         recyclerView.setAdapter(adapter);
 
         return view;
-    }
-
-    @Override
-    public void onItemClick(Doctor doctor) {
-        adapter.showBottomSheetDialog();
     }
 
     @Override
@@ -99,6 +94,6 @@ public class PatientSeeDoctorsFragment extends Fragment implements SeeDoctorsAda
         bundle.putSerializable(ARG_DOCTOR_FOR_PATIENT, doctor);
         NavHostFragment.findNavController(PatientSeeDoctorsFragment.this)
                 .navigate(R.id.action_patientSeeDoctorsFragment_to_addApointmentFragment, bundle);
-        adapter.dismissBottomSheetDialog();
+        //adapter.dismissBottomSheetDialog();
     }
 }
