@@ -10,16 +10,20 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.doctofacil.databinding.ActivityMainBinding;
+import com.example.doctofacil.model.database.DBConnection;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+
     private NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(destination.getLabel());
             }
         });
+        // TODO: remove when done
+        DBConnection db = new DBConnection(getBaseContext());
+        db.open();
 
     }
 

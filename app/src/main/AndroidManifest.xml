@@ -13,10 +13,18 @@
         android:theme="@style/Theme.DoctoFacil"
         tools:targetApi="31">
         <activity
-            android:name=".MainDoctorActivity"
+            android:name=".ui.patient.MainPatientActivity"
             android:exported="false"
-            android:label="@string/title_activity_main_doctor"
+            android:label="@string/title_activity_main_patient"
             android:theme="@style/Theme.DoctoFacil.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.doctor.MainDoctorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main_doctor">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -127,7 +127,7 @@ public class PatientSignupFragment extends Fragment {
 
     private void showDatePickerDialog(final EditText editTextDate) {
         DatePickerDialog.OnDateSetListener onDateSetListener = (datePicker, year, month, day) -> {
-            final String selectedDate = twoDigits(day) + "/" + twoDigits(month) + "/" + year;
+            final String selectedDate = twoDigits(day) + "/" + twoDigits(month+1) + "/" + year;
             Log.i("poncho", "date: "+selectedDate);
             editTextDate.setText(selectedDate);
         };
@@ -139,9 +139,8 @@ public class PatientSignupFragment extends Fragment {
         }else {
             String[] parts = birthDate.split("/");
             newFragment = DatePickerFragment.newInstance(onDateSetListener,
-                    Integer.parseInt(parts[2]),Integer.parseInt(parts[1]),Integer.parseInt(parts[0]));
+                    Integer.parseInt(parts[2]),Integer.parseInt(parts[1])-1,Integer.parseInt(parts[0]));
         }
-
 
         newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }

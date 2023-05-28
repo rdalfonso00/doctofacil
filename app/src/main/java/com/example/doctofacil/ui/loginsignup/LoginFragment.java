@@ -1,5 +1,6 @@
 package com.example.doctofacil.ui.loginsignup;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -9,6 +10,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +18,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.doctofacil.R;
+import com.example.doctofacil.model.User;
 import com.example.doctofacil.model.database.DBConnection;
 import com.example.doctofacil.ui.customviews.ErrorDialogFragment;
+import com.example.doctofacil.ui.doctor.MainDoctorActivity;
+import com.example.doctofacil.ui.patient.MainPatientActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,17 +93,24 @@ public class LoginFragment extends Fragment {
                                 .setPopUpTo(R.id.firstFragment, true) // Specify the starting fragment ID
                                 .setLaunchSingleTop(true) // Use single top launch mode
                                 .build();
+                        User user = dbConnection.getUserByEmail(email);
 
+                        Intent intent;
                         Bundle bundle = new Bundle();
-                        bundle.putString("userEmail", email);
-                        String role = dbConnection.getUserRole(email);
-                        if (role.equals("doctor")) {
-                            Navigation.findNavController(requireView())
+                        Log.i("poncho", "LOGIN userid" + user.getUser_id());
+                        bundle.putInt("user_id", user.getUser_id());
+
+                        if (user.getRole().equals("doctor")) {
+                            intent = new Intent(getActivity(), MainDoctorActivity.class);
+                            /*Navigation.findNavController(requireView())
                                     .navigate(R.id.action_loginFragment_to_mainDoctorFragment, bundle, navOptions);
+
+                             */
                         } else {
-                            Navigation.findNavController(requireView())
-                                    .navigate(R.id.action_loginFragment_to_mainPatientFragment, bundle, navOptions);
+                            intent = new Intent(getActivity(), MainPatientActivity.class);
                         }
+                        intent.putExtra("user_id", user.getUser_id());
+                        startActivity(intent);
                         // Proceed with desired action, such as navigating to another screen
                     } else {
                         // Login failed

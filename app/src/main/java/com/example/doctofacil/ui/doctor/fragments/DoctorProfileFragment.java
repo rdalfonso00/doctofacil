@@ -1,4 +1,4 @@
-package com.example.doctofacil;
+package com.example.doctofacil.ui.doctor.fragments;
 
 import android.os.Bundle;
 
@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.doctofacil.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MainPatientFragment#newInstance} factory method to
+ * Use the {@link DoctorProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainPatientFragment extends Fragment {
+public class DoctorProfileFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +26,7 @@ public class MainPatientFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MainPatientFragment() {
+    public DoctorProfileFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +36,11 @@ public class MainPatientFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MainPatientFragment.
+     * @return A new instance of fragment DoctorProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainPatientFragment newInstance(String param1, String param2) {
-        MainPatientFragment fragment = new MainPatientFragment();
+    public static DoctorProfileFragment newInstance(String param1, String param2) {
+        DoctorProfileFragment fragment = new DoctorProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +61,6 @@ public class MainPatientFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_patient, container, false);
+        return inflater.inflate(R.layout.fragment_doctor_profile, container, false);
     }
 }

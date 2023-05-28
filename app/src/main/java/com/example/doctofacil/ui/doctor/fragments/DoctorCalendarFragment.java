@@ -1,4 +1,4 @@
-package com.example.doctofacil;
+package com.example.doctofacil.ui.doctor.fragments;
 
 import android.os.Bundle;
 
@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.doctofacil.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MainDoctorFragment#newInstance} factory method to
+ * Use the {@link DoctorCalendarFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainDoctorFragment extends Fragment {
+public class DoctorCalendarFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +26,7 @@ public class MainDoctorFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MainDoctorFragment() {
+    public DoctorCalendarFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +36,11 @@ public class MainDoctorFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MainDoctorFragment.
+     * @return A new instance of fragment DoctorCalendarFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainDoctorFragment newInstance(String param1, String param2) {
-        MainDoctorFragment fragment = new MainDoctorFragment();
+    public static DoctorCalendarFragment newInstance(String param1, String param2) {
+        DoctorCalendarFragment fragment = new DoctorCalendarFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +61,6 @@ public class MainDoctorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_doctor, container, false);
+        return inflater.inflate(R.layout.fragment_doctor_calendar, container, false);
     }
 }

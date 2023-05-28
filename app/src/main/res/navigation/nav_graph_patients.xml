@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_patients"
+    app:startDestination="@id/patientProfileFragment">
+    <fragment
+        android:id="@+id/patientProfileFragment"
+        android:name="com.example.doctofacil.ui.patient.fragments.PatientProfileFragment"
+        android:label="Mi perfil"
+        tools:layout="@layout/fragment_patient_profile" />
+    <fragment
+        android:id="@+id/patientSeeDoctorsFragment"
+        android:name="com.example.doctofacil.ui.patient.fragments.PatientSeeDoctorsFragment"
+        android:label="Ver médicos"
+        tools:layout="@layout/fragment_patient_see_doctors" />
+    <fragment
+        android:id="@+id/patientAppointmentsFragment"
+        android:name="com.example.doctofacil.ui.patient.fragments.PatientAppointmentsFragment"
+        android:label="Citas"
+        tools:layout="@layout/fragment_patient_appointments" />
+
+
+</navigation>

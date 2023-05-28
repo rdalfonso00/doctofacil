@@ -22,15 +22,14 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="320dp"
         android:layout_marginTop="36dp"
         android:cropToPadding="true"
         android:scaleType="fitCenter"
 
-        android:src="@drawable/doctors"
+        android:src="@drawable/doctorjeje"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMedicoPaciente" />
 

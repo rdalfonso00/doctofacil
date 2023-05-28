@@ -63,7 +63,7 @@ public class DatePickerFragment extends DialogFragment {
         return new DatePickerDialog(getActivity(), listener, initialYear, initialMonth, initialDay);
     }
 
-    private void showDatePickerDialog(final EditText editTextDate) {
+    public void showDatePickerDialog(final EditText editTextDate) {
         DatePickerDialog.OnDateSetListener onDateSetListener = (datePicker, year, month, day) -> {
             final String selectedDate = twoDigits(day) + "/" + twoDigits(month) + "/" + year;
             Log.i("poncho", "date: "+selectedDate);
