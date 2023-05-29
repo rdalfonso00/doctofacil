@@ -1,8 +1,9 @@
 package com.example.doctofacil.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Appointment {
+public class Appointment implements Serializable {
     private int appointmentId;
     private int patientId;
     private int doctorId;

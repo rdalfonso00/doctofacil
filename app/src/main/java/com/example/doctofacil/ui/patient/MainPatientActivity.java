@@ -105,8 +105,8 @@ public class MainPatientActivity extends AppCompatActivity {
                     case R.id.nav_patient_appointments:
                         navController.navigate(R.id.patientAppointmentsFragment, bundle); break;
 
-                    case R.id.nav_pat_settings:
-                        Toast.makeText(getBaseContext(), "settings",Toast.LENGTH_SHORT).show(); break;
+                    //case R.id.nav_pat_settings:
+                     //   Toast.makeText(getBaseContext(), "settings",Toast.LENGTH_SHORT).show(); break;
                     case R.id.nav_pat_logout:
                         logout();
                         break;

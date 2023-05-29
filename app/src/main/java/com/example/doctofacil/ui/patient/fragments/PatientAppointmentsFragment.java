@@ -3,6 +3,8 @@ package com.example.doctofacil.ui.patient.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,8 +15,11 @@ import android.view.ViewGroup;
 import com.example.doctofacil.R;
 import com.example.doctofacil.model.Appointment;
 import com.example.doctofacil.model.Patient;
+import com.example.doctofacil.model.Recipe;
 import com.example.doctofacil.model.database.DBConnection;
+import com.example.doctofacil.ui.customviews.ErrorDialogFragment;
 import com.example.doctofacil.ui.patient.fragments.adapters.AppointmentsAdapter;
+import com.example.doctofacil.ui.patient.fragments.adapters.AppointmentsTerminatedAdapter;
 
 import java.util.List;
 
@@ -23,15 +28,17 @@ import java.util.List;
  * Use the {@link PatientAppointmentsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PatientAppointmentsFragment extends Fragment {
+public class PatientAppointmentsFragment extends Fragment implements AppointmentsTerminatedAdapter.OnVerRecetaClickListener{
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PATIENT = "patient";
+    private static final String ARG_APPOINTMENT = "cita";
 
     private Patient patient;
     private List<Appointment> pendingAppointmentList, terminatedAppointmentList;
     private RecyclerView recyclerViewPending, recyclerViewTerminated;
-    private AppointmentsAdapter appointmentsAdapterPending, appointmentsAdapterTerminated;
+    private AppointmentsAdapter appointmentsAdapterPending;
+    private AppointmentsTerminatedAdapter appointmentsAdapterTerminated;
     private DBConnection dbConnection;
 
     public PatientAppointmentsFragment() {
@@ -44,7 +51,6 @@ public class PatientAppointmentsFragment extends Fragment {
      *
      * @return A new instance of fragment PatientAppointmentsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static PatientAppointmentsFragment newInstance() {
         PatientAppointmentsFragment fragment = new PatientAppointmentsFragment();
         Bundle args = new Bundle();
@@ -77,8 +83,31 @@ public class PatientAppointmentsFragment extends Fragment {
 
         recyclerViewTerminated = view.findViewById(R.id.recyclerViewTerminatedAppointments);
         recyclerViewTerminated.setLayoutManager(new LinearLayoutManager(getActivity()));
-        appointmentsAdapterTerminated = new AppointmentsAdapter(terminatedAppointmentList, dbConnection);
+        appointmentsAdapterTerminated = new AppointmentsTerminatedAdapter(terminatedAppointmentList, this::onVerReceta, dbConnection);
         recyclerViewTerminated.setAdapter(appointmentsAdapterTerminated);
+
+
         return view;
+    }
+
+    @Override
+    public void onVerReceta(Appointment appointment) {
+        DBConnection dbConnection = new DBConnection(getContext());
+        Recipe recipe = dbConnection.getRecipeForAppointment(appointment.getAppointmentId());
+        if (recipe == null){
+            showErrorDialog("Error, esta cita no tiene receta asignada");
+            return;
+        }
+
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable(ARG_APPOINTMENT, appointment);
+        NavHostFragment.findNavController(PatientAppointmentsFragment.this)
+                .navigate(R.id.action_patientAppointmentsFragment_to_recetaFragment, bundle);
+    }
+
+    private void showErrorDialog(String message) {
+        ErrorDialogFragment dialogFragment = ErrorDialogFragment.newInstance(message);
+        dialogFragment.show(getParentFragmentManager(), "error_dialog");
     }
 }

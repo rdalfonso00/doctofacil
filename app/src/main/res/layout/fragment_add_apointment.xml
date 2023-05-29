@@ -135,11 +135,6 @@
             android:layout_height="wrap_content"
             android:divider="#ebebeb" />
 
-        <NumberPicker
-            android:id="@+id/numPickerAmPm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
     </LinearLayout>
 
     <View

@@ -93,18 +93,19 @@ public class DBHelper extends SQLiteOpenHelper {
         // Create recipes table
         String createRecipeTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_RECIPES + " (" +
                 COLUMN_RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_APPOINTMENT_ID + " INTEGER, " +
                 COLUMN_DOCTOR_USER_ID + " INTEGER, " +
                 COLUMN_DIAGNOSIS + " TEXT, " +
                 COLUMN_PRESCRIPTION + " TEXT, " +
                 COLUMN_DURATION + " INTEGER, " +
                 COLUMN_DOSAGE + " TEXT, " +
-                "FOREIGN KEY(" + COLUMN_DOCTOR_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "))";
+                "FOREIGN KEY(" + COLUMN_DOCTOR_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "), " +
+                "FOREIGN KEY(" + COLUMN_APPOINTMENT_ID + ") REFERENCES " + TABLE_APPOINTMENTS + "(" + COLUMN_APPOINTMENT_ID + "))";
         db.execSQL(createRecipeTableQuery);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("ALTER TABLE " + TABLE_APPOINTMENTS + " ADD COLUMN " + COLUMN_COMMENTS + " TEXT");
-        db.execSQL("ALTER TABLE " + TABLE_APPOINTMENTS + " ADD COLUMN " + COLUMN_IS_ONLINE + " INTEGER DEFAULT 0");
+        db.execSQL("ALTER TABLE " + TABLE_RECIPES + " ADD COLUMN " + COLUMN_APPOINTMENT_ID + " INTEGER");
     }
 }

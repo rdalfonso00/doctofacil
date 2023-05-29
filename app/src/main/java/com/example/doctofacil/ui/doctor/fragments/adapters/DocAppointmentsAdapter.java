@@ -1,4 +1,4 @@
-package com.example.doctofacil.ui.patient.fragments.adapters;
+package com.example.doctofacil.ui.doctor.fragments.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,43 +19,47 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.doctofacil.R;
 import com.example.doctofacil.model.Appointment;
-import com.example.doctofacil.model.Doctor;
+import com.example.doctofacil.model.Patient;
 import com.example.doctofacil.model.database.DBConnection;
 
 import java.util.List;
 
-public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapter.ViewHolder>{
+public class DocAppointmentsAdapter extends RecyclerView.Adapter<DocAppointmentsAdapter.ViewHolder>{
 
-    private List<Appointment> appointmentList;
+    private List<Appointment> appointmentList, terminatedAppointmentsList;
+    private RecyclerView terminatedAdapter;
     private DBConnection dbConnection;
 
-    private int shortAnimationDuration;
-
-    public AppointmentsAdapter(List<Appointment> appointmentList, DBConnection dbConnection) {
+    public DocAppointmentsAdapter(List<Appointment> appointmentList, List<Appointment>
+            terminatedAppointmentsList, RecyclerView terminatedAdapter, DBConnection dbConnection) {
         this.appointmentList = appointmentList;
+        this.terminatedAppointmentsList = terminatedAppointmentsList;
+        this.terminatedAdapter = terminatedAdapter;
         this.dbConnection = dbConnection;
     }
 
     @NonNull
     @Override
-    public AppointmentsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DocAppointmentsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_appointment_forpat, parent, false);
-        return new AppointmentsAdapter.ViewHolder(view);
+                .inflate(R.layout.item_appointment_fordoc, parent, false);
+        return new DocAppointmentsAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AppointmentsAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull DocAppointmentsAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Appointment appointment = appointmentList.get(position);
         String[] dateSplit = appointment.getStartTime().toString().split(" ")[0].split("-");
         String[] months = {"enero", "febrero", "marzo","abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
         holder.tvFullDateAppointment.setText(String.format("%s de %s de %s",
                 dateSplit[2], months[Integer.parseInt(dateSplit[1])], dateSplit[0]));
-        Doctor doctor = dbConnection.getDoctorById(appointment.getDoctorId());
-        holder.tvDrName.setText(String.format("%s %s", doctor.getName(),doctor.getLastName()));
+        Patient patient = dbConnection.getPatientById(appointment.getPatientId());
+        //Doctor doctor = dbConnection.getDoctorById(appointment.getDoctorId());
+        holder.tvPatName.setText(String.format("%s %s", patient.getName(),patient.getLastName()));
+        holder.tvCellphonePat.setText(patient.getPhone());
         holder.tvDayAndHour.setText(appointment.getStartTime().toString());
-        holder.tvDrSpecialty.setText(doctor.getSpecialty());
         holder.tvIsOnline.setText(appointment.isOnline() ? "En línea" : "Presencial");
+        holder.etComments.setText(appointment.getComments());
         holder.constraintLayoutDetails.setVisibility(View.GONE);
         // expand/collapse when pressed
         holder.ibExpandCollapse.setOnClickListener(view -> {
@@ -84,9 +89,9 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
             }
         });
 
-        holder.btDelete.setOnClickListener(view -> {
+        holder.btCancel.setOnClickListener(view -> {
             new AlertDialog.Builder(view.getContext())
-                    .setTitle("Cancelar cita")
+                    .setTitle("Borrar cita")
                     .setMessage("¿Estas seguro que deseas cancelar esta cita?")
                     .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                         @Override
@@ -105,11 +110,34 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
                     })
                     .setNegativeButton("No", null)
                     .show();
+
         });
 
-        holder.btReceta.setVisibility(View.GONE);
-    }
+        holder.btTerminate.setOnClickListener(view -> {
+            new AlertDialog.Builder(view.getContext())
+                    .setTitle("Borrar cita")
+                    .setMessage("¿Estas seguro que deseas finalizar esta cita?")
+                    .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // User clicked the "Yes" button, perform the action
+                            boolean res = dbConnection.updateAppointmentState(appointment.getAppointmentId(), "terminated");
+                            if (res){
+                                Toast.makeText(view.getContext(), "Cita finalizada con éxito", Toast.LENGTH_SHORT).show();
+                                terminatedAppointmentsList.add(appointmentList.get(position));
+                                appointmentList.remove(position);
+                                notifyDataSetChanged();
+                                terminatedAdapter.getAdapter().notifyDataSetChanged();
+                            }
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
 
+        });
+
+        holder.btAddReceta.setVisibility(View.GONE);
+    }
 
     @Override
     public int getItemCount() {
@@ -121,11 +149,12 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
 
         public ConstraintLayout constraintLayoutDetails;
         public TextView tvFullDateAppointment;
-        public TextView tvDrName;
-        public TextView tvDrSpecialty;
+        public TextView tvPatName;
+        public TextView tvCellphonePat;
         public TextView tvDayAndHour;
         public TextView tvIsOnline;
-        public Button btDelete, btReceta;
+        public EditText etComments;
+        public Button btCancel, btAddReceta, btTerminate;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -134,12 +163,15 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
 
             constraintLayoutDetails = itemView.findViewById(R.id.constraintLayoutDetails);
             tvFullDateAppointment = itemView.findViewById(R.id.textViewFullDateAppointment);
-            tvDrName = itemView.findViewById(R.id.textViewNombreMedicoApt);
-            tvDrSpecialty = itemView.findViewById(R.id.textViewSpecialityApt);
+            tvPatName = itemView.findViewById(R.id.textViewNombreMedicoApt);
+            tvCellphonePat = itemView.findViewById(R.id.textViewNumeroPaciente);
             tvDayAndHour = itemView.findViewById(R.id.textViewDiayHora);
             tvIsOnline = itemView.findViewById(R.id.textViewIsOnline);
-            btDelete = itemView.findViewById(R.id.buttonCancelarCitaForPat);
-            btReceta = itemView.findViewById(R.id.buttonVerReceta);
+            etComments = itemView.findViewById(R.id.editTextComments);
+            //btEdit = itemView.findViewById(R.id.buttonCancelarCitaForPat);
+            btAddReceta = itemView.findViewById(R.id.buttonAgregarReceta);
+            btCancel = itemView.findViewById(R.id.buttonCancelarCita);
+            btTerminate = itemView.findViewById(R.id.buttonTerminateAppointment);
 
             itemView.setOnClickListener(view -> {
                 //Toast.makeText(view.getContext(), "appointment pressed", Toast.LENGTH_SHORT).show();

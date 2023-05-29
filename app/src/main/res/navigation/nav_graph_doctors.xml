@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_doctors"
+    app:startDestination="@id/doctorProfileFragment">
+    <fragment
+        android:id="@+id/doctorProfileFragment"
+        android:name="com.example.doctofacil.ui.doctor.fragments.DoctorProfileFragment"
+        android:label="Mi perfil"
+        tools:layout="@layout/fragment_doctor_profile" />
+    <fragment
+        android:id="@+id/doctorAppointmentsFragment"
+        android:name="com.example.doctofacil.ui.doctor.fragments.DoctorAppointmentsFragment"
+        android:label="Citas"
+        tools:layout="@layout/fragment_doctor_appointments" >
+        <action
+            android:id="@+id/action_doctorAppointmentsFragment_to_addRecetaFragment"
+            app:destination="@id/addRecetaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/doctorPatientsFragment"
+        android:name="com.example.doctofacil.ui.doctor.fragments.DoctorPatientsFragment"
+        android:label="Pacientes"
+        tools:layout="@layout/fragment_doctor_patients" >
+        <action
+            android:id="@+id/action_doctorPatientsFragment_to_editPatientFragment"
+            app:destination="@id/editPatientFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPatientFragment"
+        android:name="com.example.doctofacil.ui.doctor.fragments.EditPatientFragment"
+        android:label="Editar paciente"
+        tools:layout="@layout/fragment_edit_patient" />
+    <fragment
+        android:id="@+id/addRecetaFragment"
+        android:name="com.example.doctofacil.ui.doctor.fragments.AddRecetaFragment"
+        android:label="AddRecetaFragment" />
+
+</navigation>

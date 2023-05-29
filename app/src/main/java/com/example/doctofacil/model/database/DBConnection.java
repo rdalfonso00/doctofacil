@@ -1,5 +1,6 @@
 package com.example.doctofacil.model.database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -356,17 +357,13 @@ public class DBConnection {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         // Prepare the selection query
-        String selection = COLUMN_DOCTOR_ID + " = ? AND ((" +
-                COLUMN_START_TIME + " <= ? AND " + COLUMN_END_TIME + " > ?) OR (" +
-                COLUMN_START_TIME + " < ? AND " + COLUMN_END_TIME + " >= ?) OR (" +
-                COLUMN_START_TIME + " >= ? AND " + COLUMN_END_TIME + " <= ?))";
+        String selection = COLUMN_DOCTOR_ID + " = ? AND " +
+                COLUMN_START_TIME + " = ?";
 
         // Prepare the selection arguments
         String[] selectionArgs = {
                 String.valueOf(doctorId),
-                String.valueOf(startTime.getTime()), String.valueOf(startTime.getTime()),
-                String.valueOf(endTime.getTime()), String.valueOf(endTime.getTime()),
-                String.valueOf(startTime.getTime()), String.valueOf(endTime.getTime())
+                startTime.toString()
         };
 
         // Execute the query
@@ -379,27 +376,7 @@ public class DBConnection {
         return isAvailable;
     }
 
-    public boolean isAppointmentTimeOverlapping(int doctorId, long startTime, long endTime) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        // Query to retrieve doctor's existing appointments overlapping with the given time range
-        String query = "SELECT * FROM " + TABLE_APPOINTMENTS +
-                " WHERE " + COLUMN_DOCTOR_ID + " = ?" +
-                " AND ((" + COLUMN_START_TIME + " BETWEEN ? AND ?) OR (" + COLUMN_END_TIME + " BETWEEN ? AND ?))";
-        String[] selectionArgs = {String.valueOf(doctorId), String.valueOf(startTime), String.valueOf(endTime),
-                String.valueOf(startTime), String.valueOf(endTime)};
-
-        Cursor cursor = db.rawQuery(query, selectionArgs);
-
-        // Check if there are any overlapping appointments
-        boolean isOverlapping = cursor.moveToFirst();
-
-        // Close the cursor and database connection
-        cursor.close();
-        db.close();
-
-        return isOverlapping;
-    }
 
     public long addAppointment(int patientId, int doctorId, Timestamp startTime, Timestamp endTime, String comments, boolean isOnline) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -509,7 +486,9 @@ public class DBConnection {
                 COLUMN_START_TIME,
                 COLUMN_END_TIME,
                 COLUMN_STATE,
-                COLUMN_RECIPE_ID
+                COLUMN_RECIPE_ID,
+                COLUMN_COMMENTS,
+                COLUMN_IS_ONLINE
         };
 
         String selection = COLUMN_DOCTOR_ID + " = ? AND " + COLUMN_STATE + " = ?";
@@ -517,7 +496,7 @@ public class DBConnection {
                 String.valueOf(doctorId),
                 state
         };
-
+        String sortOrder = COLUMN_START_TIME + " ASC";
         Cursor cursor = db.query(
                 TABLE_APPOINTMENTS,
                 projection,
@@ -525,7 +504,7 @@ public class DBConnection {
                 selectionArgs,
                 null,
                 null,
-                null
+                sortOrder
         );
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -551,13 +530,63 @@ public class DBConnection {
 
         return appointments;
     }
+    @SuppressLint("Range")
+    public List<Patient> getPatientsForDoctor(int doctorId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        List<Patient> patients = new ArrayList<>();
+
+        String query = "SELECT DISTINCT " + TABLE_USERS + ".* FROM " + TABLE_USERS +
+                " INNER JOIN " + TABLE_APPOINTMENTS +
+                " ON " + TABLE_USERS + "." + COLUMN_USER_ID + " = " + TABLE_APPOINTMENTS + "." + COLUMN_PATIENT_ID +
+                " WHERE " + TABLE_APPOINTMENTS + "." + COLUMN_DOCTOR_ID + " = ?";
+
+        String[] selectionArgs = {String.valueOf(doctorId)};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int userId = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_ID));
+                String firstName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME));
+                String lastName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_LAST_NAME));
+                String email = cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL));
+                String birthDate = cursor.getString(cursor.getColumnIndex(COLUMN_USER_BIRTHDATE));
+                String phone = cursor.getString(cursor.getColumnIndex(COLUMN_USER_CELLPHONE));
+
+                Patient patient = new Patient(userId, firstName,lastName, birthDate, phone, email, "");
+
+                // Add the patient to the list
+                patients.add(patient);
+            } while (cursor.moveToNext());
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return patients;
+    }
+
+    public boolean updateUser(int userId, String firstName, String lastName, String phone, String birthdate) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_NAME, firstName);
+        values.put(COLUMN_USER_LAST_NAME, lastName);
+        values.put(COLUMN_USER_CELLPHONE, phone);
+        values.put(COLUMN_USER_BIRTHDATE, birthdate);
+
+        String whereClause = COLUMN_USER_ID + " = ?";
+        String[] whereArgs = {String.valueOf(userId)};
+
+        int rowsAffected = db.update(TABLE_USERS, values, whereClause, whereArgs);
+        return rowsAffected > 0;
+    }
 
     public Recipe getRecipeForAppointment(int appointmentId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
                 COLUMN_RECIPE_ID,
-                COLUMN_DOCTOR_ID,
                 COLUMN_DIAGNOSIS,
                 COLUMN_PRESCRIPTION,
                 COLUMN_DURATION,
@@ -581,13 +610,13 @@ public class DBConnection {
 
         if (cursor != null && cursor.moveToFirst()) {
             int recipeId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_ID));
-            int doctorId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DOCTOR_ID));
+            //int doctorId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DOCTOR_ID));
             String diagnosis = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DIAGNOSIS));
             String prescription = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PRESCRIPTION));
             String duration = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DURATION));
             String dosage = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DOSAGE));
 
-            recipe = new Recipe(recipeId, appointmentId, doctorId, diagnosis, prescription, duration, dosage);
+            recipe = new Recipe(recipeId, appointmentId, -1, diagnosis, prescription, duration, dosage);
         }
 
         if (cursor != null) {
@@ -596,5 +625,24 @@ public class DBConnection {
 
         return recipe;
     }
+
+    public long addRecipe(int appointmentId, int doctorUserId, String diagnosis, String prescription, int duration, String dosage) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_APPOINTMENT_ID, appointmentId);
+        values.put(COLUMN_DOCTOR_USER_ID, doctorUserId);
+        values.put(COLUMN_DIAGNOSIS, diagnosis);
+        values.put(COLUMN_PRESCRIPTION, prescription);
+        values.put(COLUMN_DURATION, duration);
+        values.put(COLUMN_DOSAGE, dosage);
+
+        long recipeId = db.insert(TABLE_RECIPES, null, values);
+
+        db.close();
+
+        return recipeId;
+    }
+
 
 }

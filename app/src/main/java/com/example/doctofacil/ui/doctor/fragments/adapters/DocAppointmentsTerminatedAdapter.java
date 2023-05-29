@@ -1,60 +1,65 @@
-package com.example.doctofacil.ui.patient.fragments.adapters;
+package com.example.doctofacil.ui.doctor.fragments.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.doctofacil.R;
 import com.example.doctofacil.model.Appointment;
-import com.example.doctofacil.model.Doctor;
+import com.example.doctofacil.model.Patient;
 import com.example.doctofacil.model.database.DBConnection;
+import com.example.doctofacil.ui.patient.fragments.adapters.AppointmentsTerminatedAdapter;
 
 import java.util.List;
 
-public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapter.ViewHolder>{
+public class DocAppointmentsTerminatedAdapter extends RecyclerView.Adapter<DocAppointmentsTerminatedAdapter.ViewHolder>{
 
     private List<Appointment> appointmentList;
+    private DocAppointmentsTerminatedAdapter.OnAddRecetaClickListener onAddRecetaClickListener;
     private DBConnection dbConnection;
 
     private int shortAnimationDuration;
 
-    public AppointmentsAdapter(List<Appointment> appointmentList, DBConnection dbConnection) {
+    public DocAppointmentsTerminatedAdapter(List<Appointment> appointmentList,
+                                            DocAppointmentsTerminatedAdapter.OnAddRecetaClickListener onAddRecetaClickListener,
+                                            DBConnection dbConnection) {
         this.appointmentList = appointmentList;
+        this.onAddRecetaClickListener = onAddRecetaClickListener;
         this.dbConnection = dbConnection;
     }
 
     @NonNull
     @Override
-    public AppointmentsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DocAppointmentsTerminatedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_appointment_forpat, parent, false);
-        return new AppointmentsAdapter.ViewHolder(view);
+                .inflate(R.layout.item_appointment_fordoc, parent, false);
+        return new DocAppointmentsTerminatedAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AppointmentsAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull DocAppointmentsTerminatedAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Appointment appointment = appointmentList.get(position);
         String[] dateSplit = appointment.getStartTime().toString().split(" ")[0].split("-");
         String[] months = {"enero", "febrero", "marzo","abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
         holder.tvFullDateAppointment.setText(String.format("%s de %s de %s",
                 dateSplit[2], months[Integer.parseInt(dateSplit[1])], dateSplit[0]));
-        Doctor doctor = dbConnection.getDoctorById(appointment.getDoctorId());
-        holder.tvDrName.setText(String.format("%s %s", doctor.getName(),doctor.getLastName()));
+        Patient patient = dbConnection.getPatientById(appointment.getPatientId());
+        //Doctor doctor = dbConnection.getDoctorById(appointment.getDoctorId());
+        holder.tvPatName.setText(String.format("%s %s", patient.getName(),patient.getLastName()));
+        holder.tvCellphonePat.setText(patient.getPhone());
         holder.tvDayAndHour.setText(appointment.getStartTime().toString());
-        holder.tvDrSpecialty.setText(doctor.getSpecialty());
         holder.tvIsOnline.setText(appointment.isOnline() ? "En línea" : "Presencial");
+        holder.etComments.setText(appointment.getComments());
         holder.constraintLayoutDetails.setVisibility(View.GONE);
         // expand/collapse when pressed
         holder.ibExpandCollapse.setOnClickListener(view -> {
@@ -84,48 +89,32 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
             }
         });
 
-        holder.btDelete.setOnClickListener(view -> {
-            new AlertDialog.Builder(view.getContext())
-                    .setTitle("Cancelar cita")
-                    .setMessage("¿Estas seguro que deseas cancelar esta cita?")
-                    .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // User clicked the "Yes" button, perform the action
-                            boolean res = dbConnection.updateAppointmentState(appointment.getAppointmentId(), "canceled");
-                            if (res){
-                                Toast.makeText(view.getContext(), "Cita cancelada con éxito", Toast.LENGTH_SHORT).show();
-
-                                //terminatedAppointmentsList.add(appointmentList.get(position));
-                                appointmentList.remove(position);
-                                notifyDataSetChanged();
-                                //terminatedAdapter.getAdapter().notifyDataSetChanged();
-                            }
-                        }
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
+        holder.btAddReceta.setOnClickListener(view -> {
+            onAddRecetaClickListener.onAddReceta(appointment);
         });
 
-        holder.btReceta.setVisibility(View.GONE);
-    }
 
+        holder.btCancel.setVisibility(View.GONE);
+        holder.btTerminate.setVisibility(View.GONE);
+    }
 
     @Override
     public int getItemCount() {
         return appointmentList.size();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageButton ibExpandCollapse;
 
         public ConstraintLayout constraintLayoutDetails;
         public TextView tvFullDateAppointment;
-        public TextView tvDrName;
-        public TextView tvDrSpecialty;
+        public TextView tvPatName;
+        public TextView tvCellphonePat;
         public TextView tvDayAndHour;
         public TextView tvIsOnline;
-        public Button btDelete, btReceta;
+        public EditText etComments;
+        public Button btCancel, btTerminate, btAddReceta;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -134,16 +123,25 @@ public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapte
 
             constraintLayoutDetails = itemView.findViewById(R.id.constraintLayoutDetails);
             tvFullDateAppointment = itemView.findViewById(R.id.textViewFullDateAppointment);
-            tvDrName = itemView.findViewById(R.id.textViewNombreMedicoApt);
-            tvDrSpecialty = itemView.findViewById(R.id.textViewSpecialityApt);
+            tvPatName = itemView.findViewById(R.id.textViewNombreMedicoApt);
+            tvCellphonePat = itemView.findViewById(R.id.textViewNumeroPaciente);
             tvDayAndHour = itemView.findViewById(R.id.textViewDiayHora);
             tvIsOnline = itemView.findViewById(R.id.textViewIsOnline);
-            btDelete = itemView.findViewById(R.id.buttonCancelarCitaForPat);
-            btReceta = itemView.findViewById(R.id.buttonVerReceta);
+            etComments = itemView.findViewById(R.id.editTextComments);
+            btCancel = itemView.findViewById(R.id.buttonCancelarCita);
+            btTerminate = itemView.findViewById(R.id.buttonTerminateAppointment);
+            btAddReceta = itemView.findViewById(R.id.buttonAgregarReceta);
+
+
 
             itemView.setOnClickListener(view -> {
                 //Toast.makeText(view.getContext(), "appointment pressed", Toast.LENGTH_SHORT).show();
             });
         }
     }
+
+    public interface OnAddRecetaClickListener {
+        void onAddReceta(Appointment appointment);
+    }
+
 }

@@ -4,11 +4,14 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.doctofacil.R;
+import com.example.doctofacil.model.Doctor;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,14 +20,21 @@ import com.example.doctofacil.R;
  */
 public class DoctorProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_DOCTOR = "doctor";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Doctor doctor;
+
+    private TextView tvHola;
+    private TextView tvName;
+    private TextView tvLastName;
+    private TextView tvEmail;
+    private TextView tvBirthDate;
+    private TextView tvCellphone;
+    private TextView tvAddress;
+    private TextView tvSpecialty;
+    private TextView tvLicence;
+
 
     public DoctorProfileFragment() {
         // Required empty public constructor
@@ -34,16 +44,12 @@ public class DoctorProfileFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment DoctorProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DoctorProfileFragment newInstance(String param1, String param2) {
+    public static DoctorProfileFragment newInstance() {
         DoctorProfileFragment fragment = new DoctorProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +58,10 @@ public class DoctorProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            doctor = (Doctor) getArguments().getSerializable(ARG_DOCTOR);
+            if (doctor == null)
+                Log.i("poncho", "no patient");
+            Log.i("poncho", "YES patient");
         }
     }
 
@@ -61,6 +69,30 @@ public class DoctorProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_doctor_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_doctor_profile, container, false);
+
+        if (doctor == null)
+            return view;
+        tvHola = view.findViewById(R.id.textViewHola);
+        tvName = view.findViewById(R.id.textViewNameProfile);
+        tvLastName = view.findViewById(R.id.textViewLastNameProfile);
+        tvEmail = view.findViewById(R.id.textViewCorreoProfile);
+        tvBirthDate = view.findViewById(R.id.textViewCumpleProfile);
+        tvCellphone = view.findViewById(R.id.textViewTelProfile);
+        tvAddress = view.findViewById(R.id.textViewAddressProfile);
+        tvSpecialty = view.findViewById(R.id.textViewSpecialityProfile);
+        tvLicence = view.findViewById(R.id.textViewLicenceProfile);
+
+        tvHola.setText("Hola, Dr(a) " + doctor.getName());
+        tvName.setText(doctor.getName());
+        tvLastName.setText(doctor.getLastName());
+        tvEmail.setText(doctor.getEmail());
+        tvBirthDate.setText(doctor.getBirthDate());
+        tvCellphone.setText(doctor.getPhone());
+        tvAddress.setText(doctor.getAddress());
+        tvSpecialty.setText(doctor.getSpecialty());
+        tvLicence.setText(doctor.getLicence());
+
+        return view;
     }
 }

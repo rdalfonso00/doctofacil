@@ -53,7 +53,7 @@ public class AddApointmentFragment extends Fragment {
     private LinearLayout linearLayout;
     private LinearLayout linearLayoutNumberPicker;
     private NumberPicker numberPickerHour;
-    private NumberPicker numberPickerAMPM;
+    //private NumberPicker numberPickerAMPM;
     private CheckBox checkBox;
     private EditText editTextComentarios;
     private Button buttonAgendarCita;
@@ -103,7 +103,7 @@ public class AddApointmentFragment extends Fragment {
         linearLayout = view.findViewById(R.id.linearLayout);
         linearLayoutNumberPicker = view.findViewById(R.id.linearLayoutNumberPicker);
         numberPickerHour = view.findViewById(R.id.numPickerHour);
-        numberPickerAMPM = view.findViewById(R.id.numPickerAmPm);
+        //numberPickerAMPM = view.findViewById(R.id.numPickerAmPm);
         checkBox = view.findViewById(R.id.checkBox);
         editTextComentarios = view.findViewById(R.id.editTextComentarios);
         buttonAgendarCita = view.findViewById(R.id.buttonAgendarCitaBottom);
@@ -195,7 +195,7 @@ public class AddApointmentFragment extends Fragment {
     private void initAllPicker(int minHour, int maxHour) {
         String[] str = new String[]{"AM", "PM"};
         initPicker(minHour, maxHour, numberPickerHour);
-        initPickerWithString(0, (str.length - 1), numberPickerAMPM, str);
+        //initPickerWithString(0, (str.length - 1), numberPickerAMPM, str);
     }
 
 

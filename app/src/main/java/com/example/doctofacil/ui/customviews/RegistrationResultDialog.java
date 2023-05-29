@@ -30,7 +30,7 @@ public class RegistrationResultDialog extends DialogFragment {
         String message = getArguments().getString(ARG_MESSAGE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle(success ? "Usuario registrado" : "Error")
+        builder.setTitle(success ? "Éxito" : "Error")
                 .setMessage(message)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override

@@ -39,7 +39,7 @@
         android:id="@+id/constraintLayoutDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <View
             style="@style/line"
@@ -58,7 +58,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginLeft="32dp"
             android:textSize="@dimen/text_size_medium"
-            android:text="Médico: "
+            android:text="Paciente: "
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/line" />
 
@@ -75,45 +75,47 @@
             app:layout_constraintTop_toTopOf="@+id/textView14" />
 
         <TextView
-            android:id="@+id/textView25"
+            android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="32dp"
             android:textSize="@dimen/text_size_medium"
-            android:text="Especialidad:"
-            app:layout_constraintStart_toStartOf="@+id/textView14"
-            app:layout_constraintTop_toBottomOf="@+id/textView14" />
+            android:text="Número celular: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView14" />
 
         <TextView
-            android:id="@+id/textViewSpecialityApt"
+            android:id="@+id/textViewNumeroPaciente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
             android:text="TextView"
+            android:textColor="@color/black"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/textViewNombreMedicoApt"
-            app:layout_constraintTop_toTopOf="@+id/textView25" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView15" />
 
         <TextView
             android:id="@+id/textView27"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_medium"
             android:layout_marginTop="12dp"
             android:text="Día y hora: "
-            app:layout_constraintStart_toStartOf="@+id/textView25"
-            app:layout_constraintTop_toBottomOf="@+id/textView25" />
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintStart_toStartOf="@+id/textView15"
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
         <TextView
             android:id="@+id/textViewDiayHora"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size_medium"
             android:text="TextView"
-            android:textStyle="bold"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/textViewSpecialityApt"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/textViewNombreMedicoApt"
             app:layout_constraintTop_toTopOf="@+id/textView27" />
 
         <TextView
@@ -137,18 +139,67 @@
             app:layout_constraintEnd_toEndOf="@+id/textViewDiayHora"
             app:layout_constraintTop_toTopOf="@+id/textView29" />
 
-        <Button
-            android:id="@+id/buttonEliminarCita"
+        <TextView
+            android:id="@+id/textView78"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Eliminar cita"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="4dp"
-            android:backgroundTint="?attr/colorSecondary"
+            android:text="Comentarios"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
+        <EditText
+            android:id="@+id/editTextComments"
+            android:layout_width="278dp"
+            android:layout_height="51dp"
+            android:layout_marginTop="4dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:inputType="text|textMultiLine"
+            android:text=" "
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView78" />
+
+
+        <Button
+            android:id="@+id/buttonCancelarCita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorSecondary"
+            android:text="Cancelar cita"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextComments" />
+
+        <Button
+            android:id="@+id/buttonAgregarReceta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorSecondary"
+            android:text="Agregar receta"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonCancelarCita" />
+
+        <Button
+            android:id="@+id/buttonTerminateAppointment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/redAccent"
+            android:layout_marginTop="4dp"
+            android:text="Finalizar cita"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAgregarReceta" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

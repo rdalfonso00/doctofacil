@@ -2,23 +2,19 @@ package com.example.doctofacil.ui.patient.fragments.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.doctofacil.R;
 import com.example.doctofacil.model.Doctor;
-import com.example.doctofacil.model.Patient;
 import com.example.doctofacil.model.database.DBConnection;
-import com.example.doctofacil.ui.patient.fragments.PatientSeeDoctorsFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
@@ -73,7 +69,7 @@ public class SeeDoctorsAdapter extends RecyclerView.Adapter<SeeDoctorsAdapter.Vi
         btAgendar = contentView.findViewById(R.id.buttonAgendarCitaBottom);
         tvEmail = contentView.findViewById(R.id.textViewCorreoBottom);
         tvPhone = contentView.findViewById(R.id.textViewTelefonoBottom);
-        tvAddress = contentView.findViewById(R.id.textViewDireccionBottom);
+        tvAddress = contentView.findViewById(R.id.textViewCumpleañosBottom);
         tvSpeciality = contentView.findViewById(R.id.textViewEspecialidadBottom);
         tvLicence = contentView.findViewById(R.id.textViewCedulaBottom);
 

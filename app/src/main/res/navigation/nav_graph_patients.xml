@@ -22,12 +22,21 @@
         android:id="@+id/patientAppointmentsFragment"
         android:name="com.example.doctofacil.ui.patient.fragments.PatientAppointmentsFragment"
         android:label="Citas"
-        tools:layout="@layout/fragment_patient_appointments" />
+        tools:layout="@layout/fragment_patient_appointments" >
+        <action
+            android:id="@+id/action_patientAppointmentsFragment_to_recetaFragment"
+            app:destination="@id/recetaFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addApointmentFragment"
         android:name="com.example.doctofacil.ui.patient.fragments.AddApointmentFragment"
         android:label="Agendar cita"
         tools:layout="@layout/fragment_add_apointment" />
+    <fragment
+        android:id="@+id/recetaFragment"
+        android:name="com.example.doctofacil.ui.patient.fragments.RecetaFragment"
+        android:label="fragment_receta"
+        tools:layout="@layout/fragment_receta" />
 
 
 </navigation>
