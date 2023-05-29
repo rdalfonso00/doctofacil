@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "appointments.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Users table
     public static final String TABLE_USERS = "users";
@@ -40,6 +40,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_END_TIME = "end_time";
     private static final String COLUMN_STATE = "state";
     private static final String COLUMN_RECIPE_ID = "recipe_id";
+    private static final String COLUMN_COMMENTS = "comments";
+    private static final String COLUMN_IS_ONLINE = "is_online";
 
     // recipes table
     private static final String TABLE_RECIPES = "recipes";
@@ -57,7 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create the doctor table
-        String createUserTable = "CREATE TABLE " + TABLE_USERS + "("
+        String createUserTable = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS + "("
                 + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_USER_NAME + " TEXT,"
                 + COLUMN_USER_LAST_NAME + " TEXT,"
@@ -73,7 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(createUserTable);
 
         // Create appointments table
-        String createAppointmentTableQuery = "CREATE TABLE " + TABLE_APPOINTMENTS + " (" +
+        String createAppointmentTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_APPOINTMENTS + " (" +
                 COLUMN_APPOINTMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_PATIENT_ID + " INTEGER, " +
                 COLUMN_DOCTOR_ID + " INTEGER, " +
@@ -81,13 +83,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_END_TIME + " TIMESTAMP, " +
                 COLUMN_STATE + " TEXT, " +
                 COLUMN_RECIPE_ID + " INTEGER, " +
+                COLUMN_COMMENTS + " TEXT, " +
+                COLUMN_IS_ONLINE + " INTEGER DEFAULT 0, " +
                 "FOREIGN KEY(" + COLUMN_PATIENT_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "), " +
                 "FOREIGN KEY(" + COLUMN_DOCTOR_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "), " +
                 "FOREIGN KEY(" + COLUMN_RECIPE_ID + ") REFERENCES " + TABLE_RECIPES + "(" + COLUMN_RECIPE_ID + "))";
         db.execSQL(createAppointmentTableQuery);
 
         // Create recipes table
-        String createRecipeTableQuery = "CREATE TABLE " + TABLE_RECIPES + " (" +
+        String createRecipeTableQuery = "CREATE TABLE IF NOT EXISTS " + TABLE_RECIPES + " (" +
                 COLUMN_RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_DOCTOR_USER_ID + " INTEGER, " +
                 COLUMN_DIAGNOSIS + " TEXT, " +
@@ -100,7 +104,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        onCreate(db);
+        db.execSQL("ALTER TABLE " + TABLE_APPOINTMENTS + " ADD COLUMN " + COLUMN_COMMENTS + " TEXT");
+        db.execSQL("ALTER TABLE " + TABLE_APPOINTMENTS + " ADD COLUMN " + COLUMN_IS_ONLINE + " INTEGER DEFAULT 0");
     }
 }

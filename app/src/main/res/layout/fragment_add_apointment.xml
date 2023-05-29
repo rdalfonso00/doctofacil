@@ -76,7 +76,7 @@
             android:clickable="false"
             android:focusable="false"
             android:ems="10"
-            android:hint="00/00/00"
+            android:hint="00/00/0000"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:paddingLeft="12dp"
@@ -99,7 +99,7 @@
         android:layout_marginStart="4dp"
 
         android:layout_marginTop="100dp"
-        android:text="Fecha:"
+        android:text="Hora:"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_large"
         app:layout_constraintStart_toStartOf="@+id/textView17"
@@ -107,7 +107,7 @@
 
     <!-- layout for time picker mm:ss AM/PM -->
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayoutNumberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -120,7 +120,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <NumberPicker
-            android:id="@+id/numPickerH"
+            android:id="@+id/numPickerHour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -136,7 +136,7 @@
             android:divider="#ebebeb" />
 
         <NumberPicker
-            android:id="@+id/numPickerAm"
+            android:id="@+id/numPickerAmPm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -150,7 +150,7 @@
 
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutNumberPicker"
         tools:layout_editor_absoluteX="16dp" />
 
     <CheckBox
@@ -160,7 +160,7 @@
         android:layout_marginTop="24dp"
         android:paddingLeft="16dp"
         android:text="¿La cita será en línea?"
-        android:textSize="@dimen/text_size_large"
+        android:textSize="@dimen/text_size_larger"
         app:layout_constraintStart_toStartOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/view1" />
 

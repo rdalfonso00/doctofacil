@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.example.doctofacil.model.Appointment;
 import com.example.doctofacil.model.Doctor;
 import com.example.doctofacil.model.Patient;
@@ -49,6 +51,8 @@ public class DBConnection {
     private static final String COLUMN_END_TIME = "end_time";
     private static final String COLUMN_STATE = "state";
     private static final String COLUMN_RECIPE_ID = "recipe_id";
+    private static final String COLUMN_COMMENTS = "comments";
+    private static final String COLUMN_IS_ONLINE = "is_online";
 
     // recipes table
     private static final String TABLE_RECIPES = "recipes";
@@ -231,6 +235,61 @@ public class DBConnection {
         return patient;
     }
 
+    public Doctor getDoctorById(int doctorId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                COLUMN_USER_ID,
+                COLUMN_USER_NAME,
+                COLUMN_USER_LAST_NAME,
+                COLUMN_USER_CELLPHONE,
+                COLUMN_USER_EMAIL,
+                COLUMN_USER_PASSWORD,
+                COLUMN_USER_BIRTHDATE,
+                COLUMN_USER_LICENSE_ID,
+                COLUMN_USER_SPECIALTY,
+                COLUMN_USER_ADDRESS
+        };
+
+        String selection = COLUMN_USER_ID + " = ? AND " + COLUMN_USER_ROLE + " = ?";
+        String[] selectionArgs = { String.valueOf(doctorId), "doctor" };
+
+        Cursor cursor = db.query(
+                TABLE_USERS,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+        Log.i("poncho", "pat id before query db"+ doctorId);
+
+        Doctor doctor = null;
+        if (cursor == null)
+            Log.i("poncho", "CURSOR NULL AAAA");
+        if (cursor != null && cursor.moveToFirst()) {
+            int userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID));
+            String firstName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_NAME));
+            String lastName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LAST_NAME));
+            String phone = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_CELLPHONE));
+            String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL));
+            String password = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_PASSWORD));
+            String birthdate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_BIRTHDATE));
+            String licence = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_LICENSE_ID));
+            String specialty = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_SPECIALTY));
+            String address = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_ADDRESS));
+
+            doctor = new Doctor(userId, firstName, lastName, birthdate, phone, email, password, licence, specialty, address);
+            Log.i("poncho", "pat fname db " + doctor.getName());
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return doctor;
+    }
 
     public List<Doctor> getAllDoctors() {
         List<Doctor> doctors = new ArrayList<>();
@@ -292,20 +351,6 @@ public class DBConnection {
         return doctors;
     }
 
-
-    public long addAppointment(int patientId, int doctorId, Timestamp startTime, Timestamp endTime,
-                               String state, int recipeId) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_PATIENT_ID, patientId);
-        values.put(COLUMN_DOCTOR_ID, doctorId);
-        values.put(COLUMN_START_TIME, startTime.toString());
-        values.put(COLUMN_END_TIME, endTime.toString());
-        values.put(COLUMN_STATE, state);
-        values.put(COLUMN_RECIPE_ID, recipeId);
-        return db.insert(TABLE_APPOINTMENTS, null, values);
-    }
-
     // always run before addAppointment()
     public boolean isDoctorAvailable(int doctorId, Timestamp startTime, Timestamp endTime) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -332,6 +377,42 @@ public class DBConnection {
 
         cursor.close();
         return isAvailable;
+    }
+
+    public boolean isAppointmentTimeOverlapping(int doctorId, long startTime, long endTime) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // Query to retrieve doctor's existing appointments overlapping with the given time range
+        String query = "SELECT * FROM " + TABLE_APPOINTMENTS +
+                " WHERE " + COLUMN_DOCTOR_ID + " = ?" +
+                " AND ((" + COLUMN_START_TIME + " BETWEEN ? AND ?) OR (" + COLUMN_END_TIME + " BETWEEN ? AND ?))";
+        String[] selectionArgs = {String.valueOf(doctorId), String.valueOf(startTime), String.valueOf(endTime),
+                String.valueOf(startTime), String.valueOf(endTime)};
+
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        // Check if there are any overlapping appointments
+        boolean isOverlapping = cursor.moveToFirst();
+
+        // Close the cursor and database connection
+        cursor.close();
+        db.close();
+
+        return isOverlapping;
+    }
+
+    public long addAppointment(int patientId, int doctorId, Timestamp startTime, Timestamp endTime, String comments, boolean isOnline) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PATIENT_ID, patientId);
+        values.put(COLUMN_DOCTOR_ID, doctorId);
+        values.put(COLUMN_START_TIME, startTime.toString());
+        values.put(COLUMN_END_TIME, endTime.toString());
+        values.put(COLUMN_STATE, "pending");
+        values.put(COLUMN_COMMENTS, comments);
+        values.put(COLUMN_IS_ONLINE, isOnline);
+
+        return db.insert(TABLE_APPOINTMENTS, null, values);
     }
 
     public boolean updateAppointmentState(int appointmentId, String newState) {
@@ -371,7 +452,9 @@ public class DBConnection {
                 COLUMN_START_TIME,
                 COLUMN_END_TIME,
                 COLUMN_STATE,
-                COLUMN_RECIPE_ID
+                COLUMN_RECIPE_ID,
+                COLUMN_COMMENTS,
+                COLUMN_IS_ONLINE
         };
 
         String selection = COLUMN_PATIENT_ID + " = ? AND " + COLUMN_STATE + " = ?";
@@ -398,8 +481,11 @@ public class DBConnection {
                 Timestamp endTime = Timestamp.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_TIME)));
                 String appointmentState = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STATE));
                 int recipeId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_ID));
+                String comments = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMENTS));
+                int isOnline = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_ONLINE));
 
-                Appointment appointment = new Appointment(appointmentId, patientId, doctorId, startTime, endTime, appointmentState, recipeId);
+                Appointment appointment = new Appointment(appointmentId, patientId, doctorId, startTime,
+                        endTime, appointmentState, recipeId, comments, (isOnline != 0));
                 appointments.add(appointment);
             } while (cursor.moveToNext());
         }
@@ -450,8 +536,11 @@ public class DBConnection {
                 Timestamp endTime = Timestamp.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_TIME)));
                 String appointmentState = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STATE));
                 int recipeId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RECIPE_ID));
+                String comments = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMMENTS));
+                int isOnline = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_ONLINE));
 
-                Appointment appointment = new Appointment(appointmentId, patientId, doctorId, startTime, endTime, appointmentState, recipeId);
+                Appointment appointment = new Appointment(appointmentId, patientId, doctorId, startTime,
+                        endTime, appointmentState, recipeId, comments, (isOnline != 0));
                 appointments.add(appointment);
             } while (cursor.moveToNext());
         }

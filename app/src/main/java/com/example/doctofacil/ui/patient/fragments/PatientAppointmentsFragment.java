@@ -3,12 +3,20 @@ package com.example.doctofacil.ui.patient.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.doctofacil.R;
+import com.example.doctofacil.model.Appointment;
+import com.example.doctofacil.model.Patient;
+import com.example.doctofacil.model.database.DBConnection;
+import com.example.doctofacil.ui.patient.fragments.adapters.AppointmentsAdapter;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,14 +25,14 @@ import com.example.doctofacil.R;
  */
 public class PatientAppointmentsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PATIENT = "patient";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Patient patient;
+    private List<Appointment> pendingAppointmentList, terminatedAppointmentList;
+    private RecyclerView recyclerViewPending, recyclerViewTerminated;
+    private AppointmentsAdapter appointmentsAdapterPending, appointmentsAdapterTerminated;
+    private DBConnection dbConnection;
 
     public PatientAppointmentsFragment() {
         // Required empty public constructor
@@ -34,16 +42,12 @@ public class PatientAppointmentsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment PatientAppointmentsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PatientAppointmentsFragment newInstance(String param1, String param2) {
+    public static PatientAppointmentsFragment newInstance() {
         PatientAppointmentsFragment fragment = new PatientAppointmentsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +56,10 @@ public class PatientAppointmentsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            patient = (Patient) getArguments().getSerializable(ARG_PATIENT);
+            dbConnection = new DBConnection(getContext());
+            pendingAppointmentList = dbConnection.getAppointmentsForPatient(patient.getUser_id(), "pending");
+            terminatedAppointmentList = dbConnection.getAppointmentsForPatient(patient.getUser_id(), "terminated");
         }
     }
 
@@ -61,6 +67,18 @@ public class PatientAppointmentsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_patient_appointments, container, false);
+        View view = inflater.inflate(R.layout.fragment_patient_appointments, container, false);
+
+        // pending recycler
+        recyclerViewPending = view.findViewById(R.id.recyclerViewPendingAppointments);
+        recyclerViewPending.setLayoutManager(new LinearLayoutManager(getActivity()));
+        appointmentsAdapterPending = new AppointmentsAdapter(pendingAppointmentList, dbConnection);
+        recyclerViewPending.setAdapter(appointmentsAdapterPending);
+
+        recyclerViewTerminated = view.findViewById(R.id.recyclerViewTerminatedAppointments);
+        recyclerViewTerminated.setLayoutManager(new LinearLayoutManager(getActivity()));
+        appointmentsAdapterTerminated = new AppointmentsAdapter(terminatedAppointmentList, dbConnection);
+        recyclerViewTerminated.setAdapter(appointmentsAdapterTerminated);
+        return view;
     }
 }
